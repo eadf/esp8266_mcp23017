@@ -200,7 +200,10 @@ mcp23017_readRegister(MCP23017_Self *self, uint8_t deviceAddr, uint8_t regAddr, 
 
   deviceAddr &= 0x7;
   deviceAddr |= MCP23017_ADDRESS;
-  return i2c_readRegister(&(self->i2c), deviceAddr, regAddr, regValue);
+  i2c_readRegister(&(self->i2c), deviceAddr, regAddr, regValue);
+  // the mcp23017 seems to always raise a NACK when registers are read
+  // the adafruit arduino mcp23017 library also ignores the NACK
+  return true;
 }
 
 /**
