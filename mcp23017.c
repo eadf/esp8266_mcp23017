@@ -85,8 +85,11 @@ mcp23017_init(MCP23017_Self *self, uint8_t scl_pin, uint8_t sda_pin) {
 bool ICACHE_FLASH_ATTR
 mcp23017_pinModeAB(MCP23017_Self *self, uint8_t deviceAddr, MCP23017_PinMode pinmode) {
 
-  bool rv = mcp23017_writeRegister(self, deviceAddr, MCP23017_IODIRA, (pinmode==MCP23017_INPUT)?0xff:0x00);
+  bool rv = true;
+  rv &= mcp23017_writeRegister(self, deviceAddr, MCP23017_IODIRA, (pinmode==MCP23017_INPUT)?0xff:0x00);
+  rv &= mcp23017_writeRegister(self, deviceAddr, MCP23017_IPOLA, 0x00);
   rv &= mcp23017_writeRegister(self, deviceAddr, MCP23017_IODIRB, (pinmode==MCP23017_INPUT)?0xff:0x00);
+  rv &= mcp23017_writeRegister(self, deviceAddr, MCP23017_IPOLB, 0x00);
   return rv;
 }
 
@@ -139,7 +142,10 @@ mcp23017_pinMode(MCP23017_Self *self, uint8_t deviceAddr, uint8_t pin, MCP23017_
  */
 bool ICACHE_FLASH_ATTR
 mcp23017_pinModeA(MCP23017_Self *self, uint8_t deviceAddr, MCP23017_PinMode pinmode){
-  return mcp23017_writeRegister(self, deviceAddr, MCP23017_IODIRA, (pinmode==MCP23017_INPUT)?0xff:0x00);
+  bool rv = true;
+  rv &= mcp23017_writeRegister(self, deviceAddr, MCP23017_IODIRA, (pinmode==MCP23017_INPUT)?0xff:0x00);
+  rv &= mcp23017_writeRegister(self, deviceAddr, MCP23017_IPOLA, 0x00);
+  return rv;
 }
 
 /**
@@ -163,7 +169,10 @@ mcp23017_digitalReadA(MCP23017_Self *self, uint8_t deviceAddr, uint8_t* data) {
  */
 bool ICACHE_FLASH_ATTR
 mcp23017_pinModeB(MCP23017_Self *self, uint8_t deviceAddr, MCP23017_PinMode pinmode){
-  return mcp23017_writeRegister(self, deviceAddr, MCP23017_IODIRB, (pinmode==MCP23017_INPUT)?0xff:0x00);
+  bool rv = true;
+  rv &= mcp23017_writeRegister(self, deviceAddr, MCP23017_IODIRB, (pinmode==MCP23017_INPUT)?0xff:0x00);
+  rv &= mcp23017_writeRegister(self, deviceAddr, MCP23017_IPOLB, 0x00);
+  return rv;
 }
 
 /**
