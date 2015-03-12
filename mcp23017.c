@@ -30,7 +30,7 @@
 */
 
 #include "mcp23017/mcp23017.h"
-#include "i2c/i2c.h"
+#include "i2c_master.h"
 
 #define MCP23017_ADDRESS 0x20
 
@@ -75,8 +75,9 @@ static bool mcp23017_readRegister(MCP23017_Self *self, uint8_t deviceAddr, uint8
  * initiates the device. Sets the SCL and SDA pins
  */
 bool ICACHE_FLASH_ATTR
-mcp23017_init(MCP23017_Self *self, uint8_t scl_pin, uint8_t sda_pin) {
-  return i2c_init(&(self->i2c), scl_pin, sda_pin);
+mcp23017_init(MCP23017_Self *self) {
+  // i2c_master_gpio_init() and i2c_master_init(void) must already have been used.
+  return true;
 }
 
 /**
@@ -200,7 +201,7 @@ mcp23017_readRegister(MCP23017_Self *self, uint8_t deviceAddr, uint8_t regAddr, 
 
   deviceAddr &= 0x7;
   deviceAddr |= MCP23017_ADDRESS;
-  i2c_readRegister(&(self->i2c), deviceAddr, regAddr, regValue);
+  i2c_master_readRegister(deviceAddr, regAddr, regValue);
   // the mcp23017 seems to always raise a NACK when registers are read
   // the adafruit arduino mcp23017 library also ignores the NACK
   return true;
@@ -215,7 +216,7 @@ mcp23017_writeRegister(MCP23017_Self *self, uint8_t deviceAddr, uint8_t regAddr,
   deviceAddr &= 0x7;
   deviceAddr |= MCP23017_ADDRESS;
 
-  return i2c_writeRegister(&(self->i2c), deviceAddr, regAddr, regValue);
+  return i2c_master_writeRegister(deviceAddr, regAddr, regValue);
 }
 
 /**

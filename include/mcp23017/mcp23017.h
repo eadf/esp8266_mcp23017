@@ -32,11 +32,11 @@
 #ifndef DRIVER_MCP23017_INCLUDE_MCP23017_MCP23017_H_
 #define DRIVER_MCP23017_INCLUDE_MCP23017_MCP23017_H_
 
-#include "i2c/i2c.h"
+#include "i2c_master.h"
 #include "c_types.h"
 
 typedef struct {
-  I2C_Self i2c;
+  // placeholder to store (future) persistent data
 } MCP23017_Self;
 
 typedef enum {
@@ -45,9 +45,9 @@ typedef enum {
 } MCP23017_PinMode;
 
 /**
- * initiates the device. Sets the SCL and SDA pins
+ * initiates the device.
  */
-bool mcp23017_init(MCP23017_Self *self, uint8_t scl_pin, uint8_t sda_pin);
+bool mcp23017_init(MCP23017_Self *self);
 
 /**
  * Sets the pin mode to either MCP23017_INPUT or MCP23017_OUTPUT
